@@ -1,0 +1,8 @@
+_target_: subsampling.strategies.strategy_n_first
+
+image_folder_path: "${dataset.image_path}"
+n: ${n_samples}
+val_size: ${val.val_set_size}
+imgExtension: "${dataset.extension}"
+
+name: "n_first_${n_samples}"

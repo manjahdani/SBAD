@@ -1,0 +1,7 @@
+weights: "${project_dir}/yolov8/yolov8n.pt"
+name: "${dataset.name}_yolov8n_${strategy.name}"
+entity: "YourEntity"
+project: "${dataset.basename}"
+epochs: 1
+batch: 32
+data: "${project_dir}/experiments/model/data.yaml"
