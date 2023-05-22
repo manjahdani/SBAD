@@ -1,6 +1,6 @@
 # Stream-Based Active Distillation for Scalable Model Deployment
 
-[paper](link)[test_set_WALT_cam1](https://universe.roboflow.com/sbad/walt_cam1_test_set) [test_set_WALT_cam2](https://universe.roboflow.com/sbad/walt_cam2_test_set)
+[[paper]](link)[[test_set_WALT_cam1]](https://universe.roboflow.com/sbad/walt_cam1_test_set) [[test_set_WALT_cam2]](https://universe.roboflow.com/sbad/walt_cam2_test_set)
 
 ![Pipeline](images/SBAD-transparent.png)
 
@@ -12,7 +12,7 @@
 
 ---
 
-## 1. Installation
+## 1. [Installation](#installation)
 
 The code was developed using Linux 20.04. 
 
@@ -46,7 +46,7 @@ wandb login
 ```
 
 
-## 2. Datasets
+## 2. [Datasets](#datasets)
 
 This is the required dataset structure :
 
@@ -94,7 +94,7 @@ Dataset
 ```
 
 
-## 3. Getting Started 
+## 3. [Getting Started](#getting-started) 
 
 ### Generation of the pseudo labels (populate bank)
 
@@ -142,14 +142,14 @@ The logs and outputs of the runs are stored in the `output` folder.
 >
 > If you add parameters during training, make a note of it somewhere. For example if you use a batch number of 32 instead of the default 16, set your run name to : `S05c016-firstn-100-batch-8`. You should add this behavior to your hydra config files if you use your own dataset and experimentation config.
 
-## 3. Download Models, Test on Dataset, and Log Metric for Analysis
+## 4. [Testing](#testing)
 
 You can use the download to get all the models of a specific project from wandb. Then you use the inference tool to test the models on the dataset. Finally use the inference_coco tool to generate the same testing metrics for the student and teacher models. All the testing results are concatenated in a single file.
 
 We Have created a `test.py` file that executes all of these steps in a single command.
 
 ```
-python test.py --run-prefix AI-city --entity YourEntity --project Ai-city --template testing/templates/Ai-city.yaml --dataset_path "YOURPATH/WALT-or-AI-city/"
+python test.py --run-prefix WALT --entity YourEntity --project WALT --template testing/templates/WALT.yaml --dataset_path "YOURPATH/WALT/"
 ```
 
 Flags :
@@ -157,7 +157,7 @@ Flags :
 - `--project` : wandb project name
 - `--run-prefix` : project name used as prefix in the runs names (sometimes it's different than the wandb project name, like in the case of "study")
 - `--template` : template file for data.yaml used to specify test "sub" datasets
-- `--dataset_path` : parent path containing all dataset folders (S0XC0XX in case of AI-City, camX in case of WALT) 
+- `--dataset_path` : parent path containing all dataset folders (camX in case of WALT) 
 - `--query_filter` : you can choose to download and test only specific models by filtering through characters or words in the run names.
 - `--wandb-download` : you can set this to false, if you would like to run all testing pipeline without the download script
 
@@ -171,22 +171,22 @@ You can also run each script/tool individually :
 
 1. Download models :
 ```
-python testing/download.py -e YourEntity -p Ai-city -f ./testdir/Ai-city/wandb -lf -d
+python testing/download.py -e YourEntity -p WALT -f ./testdir/WALT/wandb -lf -d
 ```
 
 2. Test downloaded models on the test set :
 ```
-python3 ./testing/inference.py -w ./testing/Ai-city/wandb -d "YOURPATH/WALT-or-AI-city/" -p AI-city -y testing/templates/Ai-city.yaml -f test -c ./testdir/Ai-city/inference_results.csv
+python3 ./testing/inference.py -w ./testing/WALT/wandb -d "YOURPATH/WALT/" -p WALT -y testing/templates/WALT.yaml -f test -c ./testdir/WALT/inference_results.csv
 ```
 
 3. Test pretrained Student and Teacher models on dataset :
 ```
-python3 testing/inference_coco.py --model yolov8n --csv_path ./testdir/Ai-city/inference_results.csv --dataset "s05c016->"YOURPATH/WALT-or-AI-city/s05c016/" --dataset "s05c017->"YOURPATH/WALT-or-AI-city/s05c017/" --data-template testing/templates/Ai-city.yaml --folder test
+python3 testing/inference_coco.py --model yolov8n --csv_path ./testdir/WALT/inference_results.csv --dataset "s05c016->"YOURPATH/WALT/s05c016/" --dataset--data-template testing/templates/Ai-city.yaml --folder test
 ```
 
 4. Plot graphs :
 ```
-python testing/plot.py --csv_path ./testdir/Ai-city/inference_results.csv --save_path ./testdir/Ai-city/plots
+python testing/plot.py --csv_path ./testdir/WALT/inference_results.csv --save_path ./testdir/Ai-city/plots
 ```
 
 Use the `--help` flag for more information on the usage of each script.
