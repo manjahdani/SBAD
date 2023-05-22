@@ -1,22 +1,60 @@
-# Stream-Based Active Distillation for scalable model deployment
+# Stream-Based Active Distillation for Scalable Model Deployment
 
+[paper](link)[test_set_WALT_cam1](https://universe.roboflow.com/sbad/walt_cam1_test_set) [test_set_WALT_cam2](https://universe.roboflow.com/sbad/walt_cam2_test_set)
 
 ![Pipeline](images/SBAD-transparent.png)
 
-<!-- ## Table of Contents
-- [Introduction](#description)
-- [Datasets](#usage)
-- [Setup](#requirements)
-- [Usage](#usage)
- -->
+## Table of Contents
+1. [Installation](#installation)
+2. [Datasets](#datasets)
+3. [Getting Started](#getting-started)
+4. [Testing](#testing)
 
-## Datasets
+---
+
+## 1. Installation
+
+The code was developed using Linux 20.04. 
+
+### Setup your virtual environment 
+
+We recommend working in a virtualenv or conda environment.
+
+```bash
+conda create -y --name SBAD python pip
+conda activate SBAD
+```
+### Requirements
+
+To reproduce the results, you need to install the requirements of the YOLOv8 framework AND:
+
+```bash
+cd yolov8 
+pip install -r requirements.txt
+cd ..
+pip install -r requirements.txt
+```
+### Configure wandb
+
+We use wandb to log all experimentations. You can either use your own account, or create a team. Either way, you will need to login and setup an entity to push logs and model versions to.
+
+1. Create a [wandb](https://wandb.ai/) entity
+2. Setup wandb to send logs :
+
+```bash
+wandb login
+```
+
+
+## 2. Datasets
 
 This is the required dataset structure :
 
 ![Dataset Structure](images/traill22_dataset_structure.svg)
 
-Slight modifications to the structure are possible, but should be configured appropriately in the experimentation configuration. Here's How we used AI-City and WALT :
+Slight modifications to the structure are possible, but should be configured appropriately in the experimentation configuration.
+
+Here's How we used WALT :
 
 - WALT
 
@@ -38,22 +76,6 @@ WALT-challenge
     └── ...
 ```
 
-- AI-city
-
-```
-AI-city
-├── S01c011
-│   ├── bank
-│   │   ├── images
-│   │   └── labels
-│   ├── test
-│   │   ├── images
-│   │   └── labels
-.
-└── S{i}c{j}
-    └── ...
-```
-
 - Your Dataset
 ```
 Dataset
@@ -71,73 +93,46 @@ Dataset
     └── labels
 ```
 
-## Installation
 
-- We recommend working in a virtualenv or conda environnement 
-
-```bash
-conda create -y --name SBAD python pip
-conda activate SBAD
-```
-
-### Install requirements
-
-```bash
-cd yolov8 
-pip install -r requirements.txt
-cd ..
-pip install -r requirements.txt
-```
-
-### Configure wandb
-We use wandb to log all experimentations, you can either use your own account, or create a team. Either way you will need to login and setup an entity to push logs and model versions to.
-
-- Create a [wandb](https://wandb.ai/) entity
-- Setup wandb to send logs :
-```bash
-wandb login
-```
-
-## Getting Started 
+## 3. Getting Started 
 
 ### Generation of the pseudo labels (populate bank)
 
+To generate the pseudo labels, execute the following command:
+
 ```bash
-python annotation/generate_pseudo_labels.py --parent "YOURPATH/WALT-or-AI-city/bank" --extension "jpg-or-png"
+python annotation/generate_pseudo_labels.py --parent "YOURPATH/WALT" --extension "jpg-or-png"
 ```
-*remark*: bank folder must contain an images/ folder that contains all the images. If you are on Windows, you can you only use the `"` and **not** the `'`.
+*Note:* The 'bank' folder must contain an 'images' folder with all the images. If you are on Windows, only use `"` and **not** `'`.
 
-### Conduct an experiment
+### Conduct an Experiment
 
-IMPORTANT : Setup your wandb entity in the `experiments/model/yolov8.yaml` hydra config file.
+Before conducting an experiment, ensure your wandb entity and the project are correctly set up in the `experiments/model/yolov8.yaml` Hydra config file.
 
-Running an experiment consists in the following steps:
-    
-1. Populate a `val` folder based on the data contained in bank  folder.
-2. Populate a `train` folder based on a `strategy` applied on the data contained in bank folder. The `strategy` ensures that no images are duplicated between the train and the val sets.
-3. Launch a training on a `yolov8n` model based on the previously generated sets. The scripts automatically launches everything to wandb.
+To conduct an experiment, follow these steps:
 
+1. Populate a `val` folder based on the data contained in the bank folder.
+2. Populate a `train` folder based on a `strategy` applied on the data contained in the bank folder. The `strategy` ensures that no images are duplicated between the train and the val sets.
+3. Launch a training on a `yolov8n` model based on the previously generated sets. The scripts automatically launch everything to wandb.
 
-The following is based on the configuration file of [Hydra](https://hydra.cc/) which is a powerful configuration tool which allow to modify easily the conducted experiments.
-
-You can launch an experiment by executing main:
+You can launch an experiment by executing the main script:
 
 ```bash
-python main.py
+python train.py
 ```
 
-If needed, you can add `HYDRA_FULL_ERROR=1` as env variable to see a bit more clearly the Traceback in case of debuging.
+In case of debugging, you can add `HYDRA_FULL_ERROR=1` as an environment variable to see the traceback more clearly.
 
 ```bash
-HYDRA_FULL_ERROR=1 python main.py
+HYDRA_FULL_ERROR=1 python train.py
 ```
 
 #### Modify the configs to change the experiments
-To make a long story short, hydra is a configuration management tool that retrieves the information included in the `*.yaml` files to facilitate the deployment of the application.
+Hydra is a configuration management tool that retrieves the information included in the `*.yaml` files to facilitate the deployment of the application.
 
 To modify an experiment you can modify the configuration file `experiments/experiment.yaml`. **At your first use, you will have to modify the paths to the dataset and your wandb username.**
 
-The logs, outputs and stuffs of your runs are automatically outputed in the `output` folder.
+The logs and outputs of the runs are stored in the `output` folder.
 
 *remark*: if you are using Windows, do not forget to adapt your paths by using `/` instead of **not** `\` or `//`.
 
@@ -147,8 +142,7 @@ The logs, outputs and stuffs of your runs are automatically outputed in the `out
 >
 > If you add parameters during training, make a note of it somewhere. For example if you use a batch number of 32 instead of the default 16, set your run name to : `S05c016-firstn-100-batch-8`. You should add this behavior to your hydra config files if you use your own dataset and experimentation config.
 
-
-## Download Models, Test on Dataset, and Log Metric for Analysis
+## 3. Download Models, Test on Dataset, and Log Metric for Analysis
 
 You can use the download to get all the models of a specific project from wandb. Then you use the inference tool to test the models on the dataset. Finally use the inference_coco tool to generate the same testing metrics for the student and teacher models. All the testing results are concatenated in a single file.
 
