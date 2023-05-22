@@ -12,7 +12,7 @@
 
 ---
 
-## 1. [Installation](#installation)
+## Installation <a name="installation"></a>
 
 The code was developed using Linux 20.04. 
 
@@ -46,7 +46,7 @@ wandb login
 ```
 
 
-## 2. [Datasets](#datasets)
+## Datasets <a name="datasets"></a>
 
 This is the required dataset structure :
 
@@ -94,7 +94,7 @@ Dataset
 ```
 
 
-## 3. [Getting Started](#getting-started) 
+## 3. Getting Started <a name="getting-started"></a>
 
 ### Generation of the pseudo labels (populate bank)
 
@@ -142,7 +142,7 @@ The logs and outputs of the runs are stored in the `output` folder.
 >
 > If you add parameters during training, make a note of it somewhere. For example if you use a batch number of 32 instead of the default 16, set your run name to : `S05c016-firstn-100-batch-8`. You should add this behavior to your hydra config files if you use your own dataset and experimentation config.
 
-## 4. [Testing](#testing)
+## 4. Testing <a name="testing"></a>
 
 You can use the download to get all the models of a specific project from wandb. Then you use the inference tool to test the models on the dataset. Finally use the inference_coco tool to generate the same testing metrics for the student and teacher models. All the testing results are concatenated in a single file.
 
