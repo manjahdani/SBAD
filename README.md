@@ -29,8 +29,6 @@ conda activate SBAD
 To reproduce the results, you need to install the requirements of the YOLOv8 framework AND:
 
 ```bash
-cd yolov8 
-pip install -r requirements.txt
 cd ..
 pip install -r requirements.txt
 ```
