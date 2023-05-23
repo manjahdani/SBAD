@@ -132,6 +132,9 @@ Hydra is a configuration management tool that retrieves the information included
 
 To modify an experiment you can modify the configuration file `experiments/experiment.yaml`. **At your first use, you will have to modify the paths to the dataset and your wandb username.**
 
+You need to modify 
+1. experiments/model/yolov8.yaml (WANDB entity)
+2. experiments/experiment.yaml (Insert your data folder)
 The logs and outputs of the runs are stored in the `output` folder.
 
 *remark*: if you are using Windows, do not forget to adapt your paths by using `/` instead of **not** `\` or `//`.
@@ -146,7 +149,7 @@ The logs and outputs of the runs are stored in the `output` folder.
 
 You can use the download to get all the models of a specific project from wandb. Then you use the inference tool to test the models on the dataset. Finally use the inference_coco tool to generate the same testing metrics for the student and teacher models. All the testing results are concatenated in a single file.
 
-We Have created a `test.py` file that executes all of these steps in a single command.
+We have created a `test.py` file that executes all of these steps in a single command.
 
 ```
 python test.py --run-prefix WALT --entity YourEntity --project WALT --template testing/templates/WALT.yaml --dataset_path "YOURPATH/WALT/"

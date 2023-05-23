@@ -3,6 +3,6 @@ _target_: subsampling.strategies.uniform_stream_based
 image_labels_path: "${dataset.label_path}"
 n: ${n_samples}
 val_size: ${val.val_set_size}
-sampling_rate: 0.005
-
+sampling_rate: 0.10
+seed: 0
 name: "random_${n_samples}"
