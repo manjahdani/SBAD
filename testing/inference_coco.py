@@ -50,6 +50,10 @@ def main(model, csv_path, datasets, base_data_yaml, task):
     print(f'Found {len(runs)} runs of which {testable} need testing')
     print(tabulate([r.values() for r in runs], headers=['MODEL', 'DATA-SHORT-NAME', 'DATA', 'TESTED']))
     
+    if torch.cuda.is_available():
+        device = "cuda:0" #Use GPU
+    else:
+        device = None   # Use CPU
 
     # testing
     for i, run in enumerate(runs):
@@ -65,8 +69,10 @@ def main(model, csv_path, datasets, base_data_yaml, task):
             build_yaml_file(base_data_yaml, run['data'])
             
             model = YOLO(run['model'] + '.pt')
+            
+                # Check if GPU is available
 
-            results = model.val(data=TMP_DATA_YAML, task=task, imgsz=640, conf=0.4, iou=0.7, batch=1, single_cls=True) # [2, 3, 7]
+            results = model.val(data=TMP_DATA_YAML, task=task, imgsz=640, conf=0.4, iou=0.7, batch=1, single_cls=True, device=device) # [2, 3, 7]
             
             if len(results) == len(METRICS):
                 with open(csv_path, 'a+') as f:

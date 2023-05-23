@@ -110,6 +110,12 @@ def main(weights_path, csv_path, dataset_path, project, wandb_project_name, base
     print(tabulate([r.values() for r in runs], headers=['RUN-ID', 'DATA-SHORT-NAME', 'STRATEGY', 'EPOCHS', 'BEST/EPOCH', 'SAMPLES', 'DATA', 'MODEL', 'TESTED']))
     
     # testing
+    # Check if GPU is available
+    if torch.cuda.is_available():
+        device = "cuda:0" #Use GPU
+    else:
+        device = None   # Use CPU
+
     for i, run in enumerate(runs):
         try:
             if run['tested'] == 'YES':
@@ -119,7 +125,7 @@ def main(weights_path, csv_path, dataset_path, project, wandb_project_name, base
             print(f'[{i+1}/{len(runs)}] Testing... : {run["id"]}')
             build_yaml_file(base_data_yaml, run['data'])
             model = YOLO(run['model'])
-            results = model.val(data=TMP_DATA_YAML, task=task)
+            results = model.val(data=TMP_DATA_YAML, task=task, device = device)
             
             if len(results) == len(METRICS):
                 with open(csv_path, 'a+') as f:
