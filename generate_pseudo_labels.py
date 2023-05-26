@@ -3,9 +3,10 @@ import sys
 import glob
 import argparse
 from tqdm import tqdm
-
-sys.path.append(os.path.join(os.path.dirname(sys.path[0]), "yolov8", "ultralytics"))
+import torch
+sys.path.append(os.path.join(sys.path[0], "yolov8", "ultralytics"))
 from ultralytics import YOLO
+
 
 
 def handle_args():
@@ -60,10 +61,23 @@ def generate_pseudo_labels():
     labels_dir = f"{args.folder}/labels_{args.model_name}"
     os.makedirs(labels_dir, exist_ok=True)
 
+    if not args.output_conf:
+        labels_dir = f"{args.folder}/labels_{args.model_name}"
+        os.makedirs(labels_dir, exist_ok=True)
+    else:
+        labels_dir = f"{args.folder}/labels_{args.model_name}_w_conf"
+        os.makedirs(labels_dir, exist_ok=True)
+
     # inference
+        # Check if GPU is available
+    if torch.cuda.is_available():
+        device = "cuda:0" #Use GPU
+    else:
+        device = None   # Use CPU
+
     for i in tqdm(range(len(imgs))):
         img_name = os.path.basename(imgs[i]).split(f".{args.extension}")[0]
-        results = model.predict(source=imgs[i], verbose=False)
+        results = model.predict(source=imgs[i], verbose=False, device = device)
         boxes = results[0].boxes.xywhn
         classes = results[0].boxes.cls
         confs = results[0].boxes.conf
