@@ -1,6 +1,6 @@
 # Stream-Based Active Distillation for Scalable Model Deployment
 
-[[paper]](link)[[test_set_WALT_cam1]](https://universe.roboflow.com/sbad/walt_cam1_test_set) [[test_set_WALT_cam2]](https://universe.roboflow.com/sbad/walt_cam2_test_set)
+[[paper]](https://openaccess.thecvf.com/content/CVPR2023W/L3D-IVU/html/Manjah_Stream-Based_Active_Distillation_for_Scalable_Model_Deployment_CVPRW_2023_paper.html) [[poster]](https://drive.google.com/file/d/1C240nyjE7iUKLqe-sycxGSnn2jnoOFhq/view?usp=sharing)[[test_set_WALT_cam1]](https://universe.roboflow.com/sbad-dvvax/sbad_cam1_test_set/dataset/3) [[test_set_WALT_cam2]](https://universe.roboflow.com/sbad-dvvax/sbad_cam2_test_set/dataset/1)
 
 ![Pipeline](images/SBAD-transparent.png)
 
